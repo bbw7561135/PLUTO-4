@@ -50,6 +50,7 @@
 */
 /* ///////////////////////////////////////////////////////////////////// */
 #include "pluto.h"
+#include "prototypes.h"
 
 #define VTK_RECTILINEAR_GRID    14
 #define VTK_STRUCTURED_GRID     35
@@ -81,7 +82,7 @@
          AL_Write_header (arr, nelem, MPI_DOUBLE, SZ_Float_Vect);
 #else
  #define VTK_HEADER_WRITE_STRING(header) \
-         fprintf (fvtk,header);
+         fprintf (fvtk,"%s",header);
  #define VTK_HEADER_WRITE_FLTARR(arr,nelem) \
          fwrite(arr, sizeof(float), nelem, fvtk);
  #define VTK_HEADER_WRITE_DBLARR(arr,nelem) \
@@ -155,7 +156,7 @@ void WriteVTK_Header (FILE *fvtk, Grid *grid)
   VTK_HEADER_WRITE_STRING("\n");
 #endif /* VTK_TIME_INFO */
 
-  sprintf(header,"DIMENSIONS %d %d %d\n",
+  sprintf(header,"DIMENSIONS %ld %ld %ld\n",
                   nx1 + IOFFSET, nx2 + JOFFSET, nx3 + KOFFSET);
   VTK_HEADER_WRITE_STRING(header);
   
@@ -209,7 +210,7 @@ void WriteVTK_Header (FILE *fvtk, Grid *grid)
 
   if (node_coord == NULL) node_coord = ARRAY_2D(nx1 + IOFFSET, 3, float);
 
-  sprintf(header,"POINTS %d float\n", (nx1+IOFFSET)*(nx2+JOFFSET)*(nx3+KOFFSET));
+  sprintf(header,"POINTS %ld float\n", (nx1+IOFFSET)*(nx2+JOFFSET)*(nx3+KOFFSET));
   VTK_HEADER_WRITE_STRING(header);
 
 /* -- Write structured grid information -- */
@@ -258,7 +259,7 @@ void WriteVTK_Header (FILE *fvtk, Grid *grid)
       to WriteVTK_Vector() or WriteVTK_Scalar()...]
    ----------------------------------------------------- */
 
-  sprintf (header,"\nCELL_DATA %d\n", nx1*nx2*nx3);
+  sprintf (header,"\nCELL_DATA %ld\n", nx1*nx2*nx3);
   VTK_HEADER_WRITE_STRING (header);
 
 }

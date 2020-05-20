@@ -34,6 +34,10 @@
 #include "pluto.h"
 #define H5_USE_16_API
 #include "hdf5.h"
+#include "prototypes.h"
+#ifdef CHOMBO
+#include "bin_io.c"
+#endif
 
 #ifndef PARALLEL
  #define MPI_POSIX YES
@@ -631,7 +635,7 @@ void ReadHDF5 (Output *output, Grid *grid)
   hsize_t stride[DIMENSIONS];
   hsize_t count[DIMENSIONS];
 
-  char filename[128], tstepname[32];
+  char filename[512], tstepname[32];
   int ierr, rank, nd, nv, ns, nr;
 
 /* --------------------------------------------------------------

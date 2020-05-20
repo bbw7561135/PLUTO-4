@@ -22,6 +22,7 @@
 */
 /* ///////////////////////////////////////////////////////////////////// */
 #include "pluto.h"
+#include "prototypes.h"
 
 static void BOV_Header(Output *output, char *fdata);
 
@@ -372,7 +373,10 @@ BOV_Header(output, filename);
       fout = fopen (filename, "w");
     }else {
       fout = fopen (filename, "r+");
-      for (nv = 0; nv < output->nfile; nv++) fgets (sline, 512, fout);
+      for (nv = 0; nv < output->nfile; nv++) {
+		  if(fgets (sline, 512, fout)==NULL){
+			print ("! WriteData(): Error updating .out file for output data dump\n");
+			QUIT_PLUTO(1);}}
       fseek (fout, ftell(fout), SEEK_SET);
     }
 

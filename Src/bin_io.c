@@ -26,6 +26,7 @@
 */
 /* ///////////////////////////////////////////////////////////////////// */
 #include "pluto.h"
+#include "prototypes.h"
 
 /* ********************************************************************* */
 int FileClose (FILE *fbin, int sz) 
@@ -189,7 +190,9 @@ void FileReadData (void *V, size_t dsize, int sz, FILE *fl, int istag,
   for (k = KBEG; k <= KEND + koff; k++) {
   for (j = JBEG; j <= JEND + joff; j++) {
     i = IBEG + (NX1_TOT + ioff)*(j + (NX2_TOT + joff)*k);
-    fread (Vc + i*dsize, dsize, NX1 + ioff, fl);
+    if(fread (Vc + i*dsize, dsize, NX1 + ioff, fl)==0) {
+		print ("! FileReadData(): Error reading array from binary file\n");
+		QUIT_PLUTO(1);}
   }}
 #endif
 

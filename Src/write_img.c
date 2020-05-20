@@ -1,4 +1,5 @@
 #include "pluto.h"
+#include "prototypes.h"
 #ifdef USE_PNG
  #include <png.h>
 #endif
@@ -251,7 +252,9 @@ void GetSlice (double ***Vdbl, Image *image, Grid *grid)
 
   for (ir = 0; ir < image->nrow; ir++) {
     for (ic = 0; ic < image->ncol; ic++) {     
-      fread (&xflt, dsize, 1, fl);
+      if(fread (&xflt, dsize, 1, fl)==0) {
+		print ("! GetSlice(): roor reading slice\n");
+		QUIT_PLUTO(1);}
       if (feof(fl)){
          printf (" ! end of file reached\n");
          QUIT_PLUTO(1);

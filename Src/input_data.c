@@ -82,7 +82,7 @@ int InputDataOpen(char *data_fname, char *grid_fname, char *endianity, int pos)
  *
  *********************************************************************** */
 {
-  char *sub_str, sline[256];
+  char *sub_str, sline[512];
   const char delimiters[] = " \t\r\f\n";
   int    i, ip, success;
   int    indx; /* The 1st available element in the id_stack structure */
@@ -124,7 +124,9 @@ int InputDataOpen(char *data_fname, char *grid_fname, char *endianity, int pos)
   }
   success = 0;
   while(!success){
-    fgets(sline,512,fp);
+    if(fgets(sline,512,fp)==NULL) {
+		print ("! InputDataOpen(): grid file %s found but couldn't be read\n",grid_fname);
+		QUIT_PLUTO(1);}
     sub_str = strtok(sline, delimiters);
     while (sub_str != NULL){
       if (!strcmp(sub_str,"GEOMETRY:")) {
@@ -156,7 +158,9 @@ int InputDataOpen(char *data_fname, char *grid_fname, char *endianity, int pos)
   success = 0;
   while(!success){
     fgetpos(fp, &file_pos);
-    fgets(sline,512,fp);
+    if(fgets(sline,512,fp)==NULL) {
+		print ("! InputDataOpen(): grid file %s found but couldn't be read\n",grid_fname);
+		QUIT_PLUTO(1);}
     if (sline[0] != '#') success = 1;
   }
 
@@ -168,24 +172,36 @@ int InputDataOpen(char *data_fname, char *grid_fname, char *endianity, int pos)
        etc...                                                            */
 /* --------------------------------------------------------------------- */
    
-  fscanf (fp,"%d \n",&(id->nx1));
+  if(fscanf (fp,"%d \n",&(id->nx1))==0) {
+		print ("! InputDataOpen(): grid file %s found but couldn't read grid points\n",grid_fname);
+		QUIT_PLUTO(1);}
   id->x1 = ARRAY_1D(id->nx1, double);
   for (i = 0; i < id->nx1; i++){
-    fscanf(fp,"%d  %lf %lf\n", &ip, &xl, &xr);
+    if(fscanf(fp,"%d  %lf %lf\n", &ip, &xl, &xr)==0) {
+		print ("! InputDataOpen(): grid file %s found but couldn't read grid points\n",grid_fname);
+		QUIT_PLUTO(1);}
     id->x1[i] = 0.5*(xl + xr);
   }
 
-  fscanf (fp,"%d \n",&(id->nx2));
+  if(fscanf (fp,"%d \n",&(id->nx2))==0) {
+		print ("! InputDataOpen(): grid file %s found but couldn't read grid points\n",grid_fname);
+		QUIT_PLUTO(1);}
   id->x2 = ARRAY_1D(id->nx2, double);
   for (i = 0; i < id->nx2; i++){
-    fscanf(fp,"%d  %lf %lf\n", &ip, &xl, &xr);
+    if(fscanf(fp,"%d  %lf %lf\n", &ip, &xl, &xr)==0) {
+		print ("! InputDataOpen(): grid file %s found but couldn't read grid points\n",grid_fname);
+		QUIT_PLUTO(1);}
     id->x2[i] = 0.5*(xl + xr);
   }
 
-  fscanf (fp,"%d \n",&(id->nx3));
+  if(fscanf (fp,"%d \n",&(id->nx3))==0) {
+		print ("! InputDataOpen(): grid file %s found but couldn't read grid points\n",grid_fname);
+		QUIT_PLUTO(1);}
   id->x3 = ARRAY_1D(id->nx3, double);
   for (i = 0; i < id->nx3; i++){
-    fscanf(fp,"%d  %lf %lf\n", &ip, &xl, &xr);
+    if(fscanf(fp,"%d  %lf %lf\n", &ip, &xl, &xr)==0) {
+		print ("! InputDataOpen(): grid file %s found but couldn't read grid points\n",grid_fname);
+		QUIT_PLUTO(1);}
     id->x3[i] = 0.5*(xl + xr);
   }
   fclose(fp);

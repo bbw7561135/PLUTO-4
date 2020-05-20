@@ -60,11 +60,11 @@ void WriteVTKProcFile (double ***U, int nx1, int nx2, int nx3, char *filename)
   sprintf(header+strlen(header),"BINARY\n");
   sprintf(header+strlen(header),"DATASET %s\n","RECTILINEAR_GRID");
 
-  fprintf (fvtk,header);
+  fprintf (fvtk,"%s",header);
 
   sprintf(header,"DIMENSIONS %d %d %d\n",
                   nx1 + IOFFSET, nx2 + JOFFSET, nx3 + KOFFSET);
-  fprintf (fvtk,header);
+  fprintf (fvtk,"%s",header);
   
   for (i = 0; i < nx1 + IOFFSET; i++){
     x1 = i;
@@ -89,21 +89,21 @@ void WriteVTKProcFile (double ***U, int nx1, int nx2, int nx3, char *filename)
 /* -- Write rectilinear grid information -- */
 
   sprintf(header,"X_COORDINATES %d float\n", nx1 + IOFFSET);
-  fprintf (fvtk,header);
+  fprintf (fvtk,"%s",header);
   fwrite(xnode, sizeof(float), nx1 + IOFFSET, fvtk);
 
   sprintf(header,"\nY_COORDINATES %d float\n", nx2 + JOFFSET);
-  fprintf (fvtk,header);
+  fprintf (fvtk,"%s",header);
   fwrite(ynode, sizeof(float), nx2 + JOFFSET, fvtk);
 
   sprintf(header,"\nZ_COORDINATES %d float\n", nx3 + KOFFSET);
-  fprintf (fvtk,header);
+  fprintf (fvtk,"%s",header);
   fwrite(znode, sizeof(float), nx3 + KOFFSET, fvtk);
 
 /* -- Dataset attributes -- */
 
   sprintf (header,"\nCELL_DATA %d\n", nx1*nx2*nx3);
-  fprintf (fvtk,header);
+  fprintf (fvtk,"%s",header);
   
 /* --------------------------------------------------------
    3. Write data
